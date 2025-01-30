@@ -1,5 +1,8 @@
-// Create a webpage with a 16x16 grid of square divs
 mainContainer = document.querySelector('.container');
+
+function removeGridIfPresent() {
+    mainContainer.replaceChildren();
+}
 
 function addHoverEffectToSquare(squareDiv) {
     squareDiv.addEventListener("mouseover", () => {
@@ -8,38 +11,54 @@ function addHoverEffectToSquare(squareDiv) {
 }
 
 function getFlexedRow() {
-    // Each row will hold 16 square divs
+    // Each row will hold square divs
     rowContainer = document.createElement('div');
     rowContainer.style.display = "flex";
 
     return rowContainer;
 }
 
-function getSquareDiv() {
+function getSquareDiv(gridSize) {
     squareDiv = document.createElement('div');
 
-    // 100 / 16 = 6.25
-    squareDiv.style.height = "calc(6.25vh)"
-    squareDiv.style.width = "calc(6.25vw)"
+    height = 100 / gridSize;
+    width = 100 / gridSize;
+
+    squareDiv.style.height = `calc(${height}vh)`
+    squareDiv.style.width = `calc(${width}vw)`
 
     addHoverEffectToSquare(squareDiv);
 
     return squareDiv;
 }
 
-function create16x16Grid() {
-    for (let i = 0; i < 16; i++) {
+function createGrid(size) {
+    removeGridIfPresent();
+
+    for (let i = 0; i < size; i++) {
         rowContainer = getFlexedRow();
 
-        for (let j = 0; j < 16; j++) {
-            squareDiv = getSquareDiv();
+        for (let j = 0; j < size; j++) {
+            squareDiv = getSquareDiv(size);
 
             rowContainer.appendChild(squareDiv);
         }
 
-        // When a row has been populated with 16 divs
+        // When a row has been populated with square divs
         mainContainer.appendChild(rowContainer);
     }
 }
 
-create16x16Grid();
+function askUserGridSize() {
+    let size;
+
+    gridSizeButton = document.querySelector("#grid-size-button");
+
+    gridSizeButton.addEventListener("click", () => {
+        size = prompt("Enter the drawing board size");
+
+        createGrid(size);
+    })
+}
+
+askUserGridSize();
